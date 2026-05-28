@@ -1,17 +1,18 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 
 import '#/styles.css'
 import * as Menu from '.'
 
-test('opens menu content through the component API', async () => {
+test('runs an item action from the opened menu', async () => {
+    const onSelect = vi.fn<() => void>()
     const screen = await render(
         <Menu.Root>
             <Menu.Trigger>View</Menu.Trigger>
             <Menu.Portal>
                 <Menu.Positioner>
                     <Menu.Popup>
-                        <Menu.Item>Sort by date</Menu.Item>
+                        <Menu.Item onClick={onSelect}>Sort by date</Menu.Item>
                     </Menu.Popup>
                 </Menu.Positioner>
             </Menu.Portal>
@@ -19,6 +20,7 @@ test('opens menu content through the component API', async () => {
     )
 
     await screen.getByRole('button', { name: 'View' }).click()
+    await screen.getByRole('menuitem', { name: 'Sort by date' }).click()
 
-    await expect.element(screen.getByRole('menuitem', { name: 'Sort by date' })).toBeVisible()
+    expect(onSelect).toHaveBeenCalledTimes(1)
 })

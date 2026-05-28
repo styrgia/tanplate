@@ -1,0 +1,30 @@
+openapi: 3.0.4
+info:
+    title: Orders Example API
+    version: 1.0.0
+    description: Example orders contract backed by TanStack Start server routes.
+    license:
+        name: MIT
+        url: https://opensource.org/license/mit
+servers:
+    - url: /
+tags:
+    - name: orders
+      description: Order operations.
+paths:
+    /api/orders:
+        $ref: './paths/orders.yaml'
+components:
+    schemas:
+        CreateOrderRequest:
+            $ref: './components/schemas/create-order-request.yaml'
+        Order:
+            $ref: './components/schemas/order.yaml'
+        OrderListResponse:
+            $ref: './components/schemas/order-list-response.yaml'
+        OrderResponse:
+            $ref: './components/schemas/order-response.yaml'
+        Error:
+            $ref: './components/schemas/error.yaml'
+        ErrorResponse:
+            $ref: './components/schemas/error-response.yaml'

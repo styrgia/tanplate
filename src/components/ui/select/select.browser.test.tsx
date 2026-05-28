@@ -4,7 +4,7 @@ import { render } from 'vitest-browser-react'
 import '#/styles.css'
 import * as Select from '.'
 
-test('opens select options through the component API', async () => {
+test('selects an option and reflects it in the trigger value', async () => {
     const screen = await render(
         <Select.Root defaultValue="query">
             <Select.Label>Integration</Select.Label>
@@ -30,8 +30,15 @@ test('opens select options through the component API', async () => {
             </Select.Portal>
         </Select.Root>,
     )
+    const trigger = screen.getByRole('combobox', { name: 'Integration' })
 
-    await screen.getByRole('combobox', { name: 'Integration' }).click()
+    await expect.element(trigger).toHaveTextContent('query')
+
+    await trigger.click()
 
     await expect.element(screen.getByRole('option', { name: 'TanStack Router' })).toBeVisible()
+
+    await screen.getByRole('option', { name: 'TanStack Router' }).click()
+
+    await expect.element(trigger).toHaveTextContent('router')
 })

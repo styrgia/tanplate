@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Database, Send, SquarePen, Terminal } from 'lucide-react'
 
+import { useAppForm } from '#/components/form'
 import { IntegrationCard } from '#/features/starter/integration-card'
 import {
     type ProjectNoteInput,
@@ -18,7 +18,7 @@ export const Route = createFileRoute('/')({
     component: Home,
 })
 
-function Home() {
+export function Home() {
     const queryClient = useQueryClient()
     const [submission, setSubmission] = useState<ProjectNoteResult | null>(null)
     const { data } = useSuspenseQuery(starterDashboardQueryOptions())
@@ -33,7 +33,7 @@ function Home() {
         },
     })
 
-    const form = useForm({
+    const form = useAppForm({
         defaultValues: {
             contactName: '',
             nextStep: '',
@@ -124,7 +124,7 @@ function Home() {
                                 form.handleSubmit()
                             }}
                         >
-                            <form.Field
+                            <form.AppField
                                 name="contactName"
                                 validators={{
                                     onChange: ({ value }) =>
@@ -134,28 +134,14 @@ function Home() {
                                 }}
                             >
                                 {(field) => (
-                                    <label
-                                        className="flex flex-col gap-2 text-sm font-medium"
-                                        htmlFor={field.name}
-                                    >
-                                        Name
-                                        <input
-                                            aria-label="Name"
-                                            className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-base font-normal outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
-                                            id={field.name}
-                                            name={field.name}
-                                            onBlur={field.handleBlur}
-                                            onChange={(event) =>
-                                                field.handleChange(event.target.value)
-                                            }
-                                            value={field.state.value}
-                                        />
-                                        <FieldErrors errors={field.state.meta.errors} />
-                                    </label>
+                                    <field.TextField
+                                        controlClassName="h-11 text-base font-normal"
+                                        label="Name"
+                                    />
                                 )}
-                            </form.Field>
+                            </form.AppField>
 
-                            <form.Field
+                            <form.AppField
                                 name="nextStep"
                                 validators={{
                                     onChange: ({ value }) =>
@@ -165,43 +151,19 @@ function Home() {
                                 }}
                             >
                                 {(field) => (
-                                    <label
-                                        className="flex flex-col gap-2 text-sm font-medium"
-                                        htmlFor={field.name}
-                                    >
-                                        Next step
-                                        <textarea
-                                            aria-label="Next step"
-                                            className="min-h-28 resize-y rounded-md border border-zinc-300 bg-white px-3 py-2 text-base font-normal leading-6 outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
-                                            id={field.name}
-                                            name={field.name}
-                                            onBlur={field.handleBlur}
-                                            onChange={(event) =>
-                                                field.handleChange(event.target.value)
-                                            }
-                                            value={field.state.value}
-                                        />
-                                        <FieldErrors errors={field.state.meta.errors} />
-                                    </label>
+                                    <field.TextareaField
+                                        controlClassName="h-auto min-h-28 resize-y py-2 text-base font-normal leading-6"
+                                        label="Next step"
+                                    />
                                 )}
-                            </form.Field>
+                            </form.AppField>
 
-                            <form.Subscribe
-                                selector={(state) => [state.canSubmit, state.isSubmitting] as const}
-                            >
-                                {([canSubmit, isSubmitting]) => (
-                                    <button
-                                        className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-300"
-                                        disabled={!canSubmit || isSubmitting || saveNote.isPending}
-                                        type="submit"
-                                    >
-                                        <Send aria-hidden="true" className="h-4 w-4" />
-                                        {isSubmitting || saveNote.isPending
-                                            ? 'Saving'
-                                            : 'Save note'}
-                                    </button>
-                                )}
-                            </form.Subscribe>
+                            <form.AppForm>
+                                <form.SubmitButton className="h-11" disabled={saveNote.isPending}>
+                                    <Send aria-hidden="true" className="h-4 w-4" />
+                                    {saveNote.isPending ? 'Saving' : 'Save note'}
+                                </form.SubmitButton>
+                            </form.AppForm>
 
                             {saveNote.isError ? (
                                 <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -221,14 +183,6 @@ function Home() {
             </div>
         </main>
     )
-}
-
-function FieldErrors({ errors }: { errors: Array<unknown> }) {
-    if (errors.length === 0) {
-        return null
-    }
-
-    return <span className="text-sm font-normal text-red-700">{errors.map(String).join(', ')}</span>
 }
 
 function getErrorMessage(error: unknown) {

@@ -13,7 +13,7 @@ Before substantial work:
 
 ## Project Context
 
-This repository is a TanStack Start application scaffolded on 2026-05-28. The exact scaffold command was:
+This repository is `tanplate`, a TanStack Start application scaffolded on 2026-05-28 and then expanded into a Bun-ready starter workspace. The original scaffold command was:
 
 ```bash
 npx @tanstack/cli@latest create my-tanstack-app --agent --tailwind --add-ons sentry
@@ -26,23 +26,28 @@ The app was created from the Blank template in `my-tanstack-app`, then moved int
 - React 19 with TanStack Start file routing.
 - Tailwind CSS v4 through `@tailwindcss/vite`.
 - Sentry through `@sentry/tanstackstart-react` and `instrument.server.mjs`.
-- TanStack Devtools with the Router panel in `src/routes/__root.tsx`.
+- TanStack Devtools with Router, Query, and Form panels in `src/routes/__root.tsx`.
 - TanStack Query through `@tanstack/react-query` and `@tanstack/react-router-ssr-query`.
 - TanStack Form through `@tanstack/react-form`.
+- Typed environment validation through `@t3-oss/env-core`, `@t3-oss/env-nextjs`, and Zod in `src/env`.
+- Reusable UI components through `@base-ui/react`, `class-variance-authority`, `tailwind-merge`, and `lucide-react`.
+- OpenAPI linting, bundling, and code generation through Redocly and `@hey-api/openapi-ts`.
+- Storybook 10 through `@storybook/tanstack-react`.
 - Vitest unit tests in Node and component tests in Vitest Browser Mode through `@vitest/browser-playwright` and `vitest-browser-react`.
 - Oxlint and Oxfmt for linting and formatting.
 - Lefthook for Git hooks.
 - Nitro with the Bun preset for server output.
-- Bun is the package manager and runtime. Use `bun install`, `bun run dev`, `bun run build`, and `bun run start`.
+- Bun is the package manager and runtime. Use `bun install`, `bun run dev`, `bun run build`, and `bun run start`; do not switch scripts or lockfiles to npm, pnpm, or yarn.
 
 ## Environment Variables
 
-Local env values belong in `.env.local`, which is intentionally ignored by git. Keep `.env.example` committed with key names only.
+Local env values belong in `.env.local`, which is intentionally ignored by git. Keep `.env.example` committed with key names only. Empty strings are treated as unset by the env validators.
 
 - `VITE_SENTRY_DSN`: enables Sentry when set. If empty, the app logs that Sentry is disabled.
-- `VITE_SENTRY_ORG`: Sentry org for release/source map workflows.
-- `VITE_SENTRY_PROJECT`: Sentry project for release/source map workflows.
+- `SENTRY_ORG`: Sentry org for release/source map workflows.
+- `SENTRY_PROJECT`: Sentry project for release/source map workflows.
 - `SENTRY_AUTH_TOKEN`: secret token for Sentry release/source map workflows. Never commit a real value.
+- `SKIP_ENV_VALIDATION`: optional escape hatch for server-side tooling when set to `true`.
 
 ## Architecture Notes
 
@@ -51,9 +56,25 @@ Local env values belong in `.env.local`, which is intentionally ignored by git. 
 - The root route uses `createRootRouteWithContext` so route loaders can access `queryClient`.
 - Server-only work belongs in `createServerFn`; loaders are isomorphic and must not import DB, filesystem, or secrets directly.
 - `src/features/starter/starter-functions.ts` contains the starter server functions and reusable query options.
+- `src/components/ui` contains Base UI-backed primitives. Keep exports in local `index.ts` files, use existing `composeClassName`/variant patterns, and add colocated browser tests/stories for new public UI components.
+- `src/components/form` contains the app-specific TanStack Form hook and field components. Prefer extending this layer over hand-rolling form wiring in routes.
+- `src/api/openapi/<name>/openapi.yaml` files are the OpenAPI entrypoints. `src/api/openapi/dist/<name>.yaml` contains bundled schemas. `src/api/generated/<name>` contains generated output from `bun run api:generate`; regenerate it instead of hand-editing generated files.
 - Test files use suffix conventions: `*.unit.test.ts` for Node.js runtime tests and `*.browser.test.tsx` for browser component tests.
 - Lint with `bun run lint`; Oxlint enables built-in Unicorn and Vitest rules, plus `eslint-plugin-better-tailwindcss` through Oxlint `jsPlugins`. Format-check with `bun run fmt:check`; write formatting with `bun run fmt`.
 - `lefthook.yml` defines a parallel `pre-commit` hook for TypeScript checking, linting, and tests. `bun install` runs `lefthook install` through the `prepare` script.
+- `.storybook/preview.tsx` imports the app stylesheet, wraps stories in a shared `QueryClientProvider`, and passes the same `queryClient` through TanStack Router story context.
+
+## Common Commands
+
+- Development: `bun run dev`.
+- Production build: `bun run build`.
+- Production start: `bun run start`.
+- Type checking: `bun run typecheck`.
+- Linting: `bun run lint`; autofix with `bun run lint:fix`.
+- Formatting: `bun run fmt:check`; write formatting with `bun run fmt`.
+- Tests: `bun run test`, `bun run test:unit`, or `bun run test:browser`.
+- OpenAPI: `bun run api:lint`, `bun run api:bundle`, `bun run api:generate`, or `bun run api:watch`.
+- Storybook: `bun run storybook` or `bun run build-storybook`.
 
 ## Deployment Notes
 
@@ -72,9 +93,13 @@ Local env values belong in `.env.local`, which is intentionally ignored by git. 
 - Do not add a separate ESLint runner for the current lint setup. Oxlint owns linting; `eslint-plugin-better-tailwindcss` is loaded through Oxlint `jsPlugins`, which Oxlint currently marks as alpha.
 - Do not switch this app to Next.js, Remix, or `react-router-dom` patterns.
 - Do not add `@testing-library/*`; component tests should use `vitest-browser-react` and Vitest browser locators.
+- Do not import server-only env or Sentry server instrumentation into client code. Use the `src/env/client.ts` and `src/env/server.ts` split.
+- Do not hand-edit files in `src/api/generated`; update the matching `src/api/openapi/<name>/openapi.yaml` and rerun the API generation command.
+- Storybook stories should rely on `.storybook/preview.tsx` providers instead of creating ad hoc Query clients unless a test case requires isolation.
 
 ## Next Steps
 
 - Add real product routes under `src/routes`.
 - Replace starter data in `src/features/starter/starter-functions.ts` with application data.
-- Decide whether to add Query/Form devtools plugins once the app has real data workflows.
+- Replace the placeholder OpenAPI contract with the real backend schema.
+- Continue growing the UI and form component layers with colocated stories and browser tests.

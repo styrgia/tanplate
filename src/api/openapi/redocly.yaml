@@ -5,5 +5,7 @@ rules:
     security-defined: off
 
 apis:
-    api@v1:
-        root: ./openapi.yaml
+    catalog@v1:
+        root: ./catalog/openapi.yaml
+    orders@v1:
+        root: ./orders/openapi.yaml

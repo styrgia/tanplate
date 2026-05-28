@@ -4,7 +4,7 @@ import { render } from 'vitest-browser-react'
 import '#/styles.css'
 import * as Drawer from '.'
 
-test('opens drawer content through the component API', async () => {
+test('opens drawer content from the trigger', async () => {
     const screen = await render(
         <Drawer.Root>
             <Drawer.Trigger>Open drawer</Drawer.Trigger>

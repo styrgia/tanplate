@@ -23,6 +23,16 @@ const preview: Preview = {
                 date: /Date$/i,
             },
         },
+        docs: {
+            codePanel: true,
+            source: {
+                type: 'dynamic',
+                transform: (source: string) =>
+                    source
+                        .replaceAll(/\n\s*data-tsd-source="[^"]*"/g, '')
+                        .replaceAll(/\sdata-tsd-source="[^"]*"/g, ''),
+            },
+        },
         tanstack: {
             router: {
                 context: { queryClient },

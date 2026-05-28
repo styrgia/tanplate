@@ -4,7 +4,7 @@ import { render } from 'vitest-browser-react'
 import '#/styles.css'
 import * as Tooltip from '.'
 
-test('shows tooltip content through the component API', async () => {
+test('shows tooltip content when the trigger is hovered', async () => {
     const screen = await render(
         <Tooltip.Provider delay={0}>
             <Tooltip.Root>

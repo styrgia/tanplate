@@ -1,0 +1,30 @@
+openapi: 3.0.4
+info:
+    title: Catalog Example API
+    version: 1.0.0
+    description: Example catalog contract backed by TanStack Start server routes.
+    license:
+        name: MIT
+        url: https://opensource.org/license/mit
+servers:
+    - url: /
+tags:
+    - name: catalog
+      description: Product catalog operations.
+paths:
+    /api/catalog/products:
+        $ref: './paths/products.yaml'
+    /api/catalog/products/{productId}:
+        $ref: './paths/products_{productId}.yaml'
+components:
+    schemas:
+        Product:
+            $ref: './components/schemas/product.yaml'
+        ProductListResponse:
+            $ref: './components/schemas/product-list-response.yaml'
+        ProductResponse:
+            $ref: './components/schemas/product-response.yaml'
+        Error:
+            $ref: './components/schemas/error.yaml'
+        ErrorResponse:
+            $ref: './components/schemas/error-response.yaml'

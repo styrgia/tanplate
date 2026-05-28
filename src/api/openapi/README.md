@@ -1,13 +1,28 @@
 ## The `openapi` folder
 
-This folder contains your entrypoint `openapi.yaml`.
+This folder contains one `openapi.yaml` entrypoint per API surface.
 
-That file contains references to the entire API definition.
+Current examples:
 
-Here are some sections to pay attention to:
+- `catalog/openapi.yaml` documents `GET /api/catalog/products` and `GET /api/catalog/products/{productId}`.
+- `orders/openapi.yaml` documents `GET /api/orders` and `POST /api/orders`.
 
-- Top-level **description**: this accepts markdown, and Redoc and Redocly API Reference will render it at the top of the docs. Consider maintaining your markdown in a separate file and [embedding it](https://redoc.ly/docs/api-reference-docs/embedded-markdown/). Note to Redoc community edition users, the special tags are only available to the Redocly API Reference users, but you can still embed markdown.
-- Security schemes: you will define the scheme(s) your API uses for security (eg OAuth2, API Key, etc...). The security schemes are used by the Redocly API Reference "Try It" API console feature.
-- [Paths](paths/README.md): this defines each endpoint. A path can have one operation per http method.
-- Tags: it's a good idea to organize each operation. Each tag can have a description. The description is used as a section description within the reference docs.
-- Servers: a list of your servers, each with a URL.
+Each API folder keeps the entrypoint thin:
+
+- `paths/*.yaml` contains one OpenAPI Path Item per file.
+- `components/schemas/*.yaml` contains reusable schemas.
+- `openapi.yaml` wires those files into the top-level `paths` and `components` maps.
+
+The matching TanStack Start server routes live under `src/routes/api`.
+
+To add another API:
+
+1. Create `src/api/openapi/<name>/openapi.yaml`.
+2. Add a matching alias to `src/api/openapi/redocly.yaml`.
+3. Add an input/output job to `src/api/openapi-ts.config.ts`.
+4. Add matching route handlers under `src/routes/api`.
+5. Add one file per path under `src/api/openapi/<name>/paths`.
+6. Add reusable schemas under `src/api/openapi/<name>/components/schemas`.
+7. Run `bun run api:lint`, `bun run api:bundle`, and `bun run api:generate`.
+
+`bun run api:generate` writes separate clients to `src/api/generated/<name>`, so different OpenAPI files do not overwrite each other.

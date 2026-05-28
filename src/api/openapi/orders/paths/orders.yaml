@@ -1,0 +1,48 @@
+get:
+    tags:
+        - orders
+    summary: List orders.
+    operationId: listOrders
+    responses:
+        '200':
+            description: Existing demo orders.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/OrderListResponse'
+        '400':
+            description: Invalid request.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/ErrorResponse'
+post:
+    tags:
+        - orders
+    summary: Create an order.
+    operationId: createOrder
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../openapi.yaml#/components/schemas/CreateOrderRequest'
+    responses:
+        '201':
+            description: Demo order created.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/OrderResponse'
+        '400':
+            description: Invalid order payload.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/ErrorResponse'
+        '404':
+            description: Product not found.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/ErrorResponse'

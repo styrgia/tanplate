@@ -1,0 +1,13 @@
+type: object
+required:
+    - productId
+    - quantity
+properties:
+    productId:
+        type: string
+        example: starter-kit
+    quantity:
+        type: integer
+        format: int32
+        minimum: 1
+        example: 2

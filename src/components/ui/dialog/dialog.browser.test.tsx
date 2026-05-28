@@ -4,7 +4,7 @@ import { render } from 'vitest-browser-react'
 import '#/styles.css'
 import * as Dialog from '.'
 
-test('opens dialog content through the component API', async () => {
+test('opens dialog content from the trigger', async () => {
     const screen = await render(
         <Dialog.Root>
             <Dialog.Trigger>Open settings</Dialog.Trigger>

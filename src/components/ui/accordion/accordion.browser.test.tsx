@@ -4,7 +4,7 @@ import { render } from 'vitest-browser-react'
 import '#/styles.css'
 import * as Accordion from '.'
 
-test('opens an accordion panel through the component API', async () => {
+test('toggles an accordion panel from the trigger', async () => {
     const screen = await render(
         <Accordion.Root>
             <Accordion.Item value="deployment">
@@ -17,9 +17,13 @@ test('opens an accordion panel through the component API', async () => {
             </Accordion.Item>
         </Accordion.Root>,
     )
+    const trigger = screen.getByRole('button', { name: 'Deployment' })
 
-    await screen.getByRole('button', { name: 'Deployment' }).click()
+    await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
 
+    await trigger.click()
+
+    await expect.element(trigger).toHaveAttribute('aria-expanded', 'true')
     await expect
         .element(screen.getByText('Production deploys run after the browser suite passes.'))
         .toBeVisible()

@@ -1,0 +1,18 @@
+get:
+    tags:
+        - catalog
+    summary: List products.
+    operationId: listCatalogProducts
+    responses:
+        '200':
+            description: Products available in the demo catalog.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/ProductListResponse'
+        '400':
+            description: Invalid request.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../openapi.yaml#/components/schemas/ErrorResponse'

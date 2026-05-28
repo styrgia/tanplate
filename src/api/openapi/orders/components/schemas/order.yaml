@@ -1,0 +1,24 @@
+type: object
+required:
+    - orderId
+    - productId
+    - quantity
+    - status
+properties:
+    orderId:
+        type: string
+        example: order-1001
+    productId:
+        type: string
+        example: starter-kit
+    quantity:
+        type: integer
+        format: int32
+        minimum: 1
+        example: 1
+    status:
+        type: string
+        enum:
+            - PENDING
+            - FULFILLED
+        example: FULFILLED

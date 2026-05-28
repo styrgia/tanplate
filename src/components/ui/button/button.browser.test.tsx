@@ -1,11 +1,25 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 
 import '#/styles.css'
 import { Button } from '.'
 
-test('renders a styled Base UI button', async () => {
-    const screen = await render(<Button>Save changes</Button>)
+test('clicks without submitting a surrounding form by default', async () => {
+    const onClick = vi.fn<() => void>()
+    const onSubmit = vi.fn<() => void>()
+    const screen = await render(
+        <form
+            onSubmit={(event) => {
+                event.preventDefault()
+                onSubmit()
+            }}
+        >
+            <Button onClick={onClick}>Save changes</Button>
+        </form>,
+    )
 
-    await expect.element(screen.getByRole('button', { name: 'Save changes' })).toBeVisible()
+    await screen.getByRole('button', { name: 'Save changes' }).click()
+
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(onSubmit).not.toHaveBeenCalled()
 })

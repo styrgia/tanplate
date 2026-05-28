@@ -1,0 +1,21 @@
+type: object
+required:
+    - productId
+    - name
+    - priceCents
+    - inStock
+properties:
+    productId:
+        type: string
+        example: starter-kit
+    name:
+        type: string
+        example: Starter Kit
+    priceCents:
+        type: integer
+        format: int32
+        minimum: 0
+        example: 4900
+    inStock:
+        type: boolean
+        example: true
