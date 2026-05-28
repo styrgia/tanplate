@@ -10,11 +10,31 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthYandexStartRouteImport } from './routes/auth/yandex/start'
+import { Route as AuthYandexCallbackRouteImport } from './routes/auth/yandex/callback'
+import { Route as AuthVkStartRouteImport } from './routes/auth/vk/start'
+import { Route as AuthVkCallbackRouteImport } from './routes/auth/vk/callback'
+import { Route as AuthGoogleStartRouteImport } from './routes/auth/google/start'
+import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
+import { Route as AuthGithubStartRouteImport } from './routes/auth/github/start'
+import { Route as AuthGithubCallbackRouteImport } from './routes/auth/github/callback'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,31 +42,155 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthYandexStartRoute = AuthYandexStartRouteImport.update({
+  id: '/auth/yandex/start',
+  path: '/auth/yandex/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthYandexCallbackRoute = AuthYandexCallbackRouteImport.update({
+  id: '/auth/yandex/callback',
+  path: '/auth/yandex/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVkStartRoute = AuthVkStartRouteImport.update({
+  id: '/auth/vk/start',
+  path: '/auth/vk/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVkCallbackRoute = AuthVkCallbackRouteImport.update({
+  id: '/auth/vk/callback',
+  path: '/auth/vk/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthGoogleStartRoute = AuthGoogleStartRouteImport.update({
+  id: '/auth/google/start',
+  path: '/auth/google/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
+  id: '/auth/google/callback',
+  path: '/auth/google/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthGithubStartRoute = AuthGithubStartRouteImport.update({
+  id: '/auth/github/start',
+  path: '/auth/github/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
+  id: '/auth/github/callback',
+  path: '/auth/github/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/github/callback': typeof AuthGithubCallbackRoute
+  '/auth/github/start': typeof AuthGithubStartRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/auth/google/start': typeof AuthGoogleStartRoute
+  '/auth/vk/callback': typeof AuthVkCallbackRoute
+  '/auth/vk/start': typeof AuthVkStartRoute
+  '/auth/yandex/callback': typeof AuthYandexCallbackRoute
+  '/auth/yandex/start': typeof AuthYandexStartRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/github/callback': typeof AuthGithubCallbackRoute
+  '/auth/github/start': typeof AuthGithubStartRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/auth/google/start': typeof AuthGoogleStartRoute
+  '/auth/vk/callback': typeof AuthVkCallbackRoute
+  '/auth/vk/start': typeof AuthVkStartRoute
+  '/auth/yandex/callback': typeof AuthYandexCallbackRoute
+  '/auth/yandex/start': typeof AuthYandexStartRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/sign-in': typeof SignInRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/github/callback': typeof AuthGithubCallbackRoute
+  '/auth/github/start': typeof AuthGithubStartRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/auth/google/start': typeof AuthGoogleStartRoute
+  '/auth/vk/callback': typeof AuthVkCallbackRoute
+  '/auth/vk/start': typeof AuthVkStartRoute
+  '/auth/yandex/callback': typeof AuthYandexCallbackRoute
+  '/auth/yandex/start': typeof AuthYandexStartRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/sign-in'
+    | '/sitemap.xml'
+    | '/dashboard'
+    | '/auth/github/callback'
+    | '/auth/github/start'
+    | '/auth/google/callback'
+    | '/auth/google/start'
+    | '/auth/vk/callback'
+    | '/auth/vk/start'
+    | '/auth/yandex/callback'
+    | '/auth/yandex/start'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml'
-  id: '__root__' | '/' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/sign-in'
+    | '/sitemap.xml'
+    | '/dashboard'
+    | '/auth/github/callback'
+    | '/auth/github/start'
+    | '/auth/google/callback'
+    | '/auth/google/start'
+    | '/auth/vk/callback'
+    | '/auth/vk/start'
+    | '/auth/yandex/callback'
+    | '/auth/yandex/start'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/sign-in'
+    | '/sitemap.xml'
+    | '/_authenticated/dashboard'
+    | '/auth/github/callback'
+    | '/auth/github/start'
+    | '/auth/google/callback'
+    | '/auth/google/start'
+    | '/auth/vk/callback'
+    | '/auth/vk/start'
+    | '/auth/yandex/callback'
+    | '/auth/yandex/start'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  SignInRoute: typeof SignInRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AuthGithubCallbackRoute: typeof AuthGithubCallbackRoute
+  AuthGithubStartRoute: typeof AuthGithubStartRoute
+  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
+  AuthGoogleStartRoute: typeof AuthGoogleStartRoute
+  AuthVkCallbackRoute: typeof AuthVkCallbackRoute
+  AuthVkStartRoute: typeof AuthVkStartRoute
+  AuthYandexCallbackRoute: typeof AuthYandexCallbackRoute
+  AuthYandexStartRoute: typeof AuthYandexStartRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +202,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +223,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/auth/yandex/start': {
+      id: '/auth/yandex/start'
+      path: '/auth/yandex/start'
+      fullPath: '/auth/yandex/start'
+      preLoaderRoute: typeof AuthYandexStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/yandex/callback': {
+      id: '/auth/yandex/callback'
+      path: '/auth/yandex/callback'
+      fullPath: '/auth/yandex/callback'
+      preLoaderRoute: typeof AuthYandexCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/vk/start': {
+      id: '/auth/vk/start'
+      path: '/auth/vk/start'
+      fullPath: '/auth/vk/start'
+      preLoaderRoute: typeof AuthVkStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/vk/callback': {
+      id: '/auth/vk/callback'
+      path: '/auth/vk/callback'
+      fullPath: '/auth/vk/callback'
+      preLoaderRoute: typeof AuthVkCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/google/start': {
+      id: '/auth/google/start'
+      path: '/auth/google/start'
+      fullPath: '/auth/google/start'
+      preLoaderRoute: typeof AuthGoogleStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/google/callback': {
+      id: '/auth/google/callback'
+      path: '/auth/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/github/start': {
+      id: '/auth/github/start'
+      path: '/auth/github/start'
+      fullPath: '/auth/github/start'
+      preLoaderRoute: typeof AuthGithubStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/github/callback': {
+      id: '/auth/github/callback'
+      path: '/auth/github/callback'
+      fullPath: '/auth/github/callback'
+      preLoaderRoute: typeof AuthGithubCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  SignInRoute: SignInRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AuthGithubCallbackRoute: AuthGithubCallbackRoute,
+  AuthGithubStartRoute: AuthGithubStartRoute,
+  AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
+  AuthGoogleStartRoute: AuthGoogleStartRoute,
+  AuthVkCallbackRoute: AuthVkCallbackRoute,
+  AuthVkStartRoute: AuthVkStartRoute,
+  AuthYandexCallbackRoute: AuthYandexCallbackRoute,
+  AuthYandexStartRoute: AuthYandexStartRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

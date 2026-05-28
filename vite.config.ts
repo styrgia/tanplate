@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from 'vite'
+import { createRequire } from 'node:module'
 import { devtools } from '@tanstack/devtools-vite'
 
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
@@ -10,6 +11,19 @@ import { nitro } from 'nitro/vite'
 import svgr from 'vite-plugin-svgr'
 
 import { resolveSitemapHost } from './src/seo/sitemap'
+
+const nodeRequire = createRequire(import.meta.url)
+const srvxGenericEntry = nodeRequire.resolve('srvx/generic')
+
+function resolveSrvxWebResponse() {
+    return {
+        name: 'resolve-srvx-web-response',
+        enforce: 'pre' as const,
+        resolveId(source: string) {
+            return source === 'srvx' ? srvxGenericEntry : null
+        },
+    }
+}
 
 const config = defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
@@ -23,6 +37,7 @@ const config = defineConfig(({ mode }) => {
         resolve: { tsconfigPaths: true },
         plugins: [
             devtools(),
+            resolveSrvxWebResponse(),
             svgr(),
             paraglideVitePlugin({
                 project: './project.inlang',
