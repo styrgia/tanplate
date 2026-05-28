@@ -6,8 +6,9 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { CheckCircle2, Database, Send, SquarePen, Terminal } from 'lucide-react'
+import { Database, Send, SquarePen, Terminal } from 'lucide-react'
 
+import { IntegrationCard } from '#/features/starter/integration-card'
 import {
   type ProjectNoteInput,
   type ProjectNoteResult,
@@ -75,19 +76,7 @@ function Home() {
 
         <section className="grid gap-4 md:grid-cols-3">
           {data.integrations.map((integration) => (
-            <article
-              className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm"
-              key={integration}
-            >
-              <CheckCircle2
-                aria-hidden="true"
-                className="h-5 w-5 text-emerald-700"
-              />
-              <h2 className="mt-4 text-lg font-semibold">{integration}</h2>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">
-                Installed and ready for application code.
-              </p>
-            </article>
+            <IntegrationCard integration={integration} key={integration} />
           ))}
         </section>
 

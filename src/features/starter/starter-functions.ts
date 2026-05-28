@@ -44,7 +44,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
 
-function validateProjectNote(data: unknown): ProjectNoteInput {
+export function normalizeProjectNote(data: unknown): ProjectNoteInput {
   if (!isRecord(data)) {
     throw new Error('Expected an object payload.')
   }
@@ -67,7 +67,7 @@ function validateProjectNote(data: unknown): ProjectNoteInput {
 }
 
 export const submitProjectNote = createServerFn({ method: 'POST' })
-  .inputValidator(validateProjectNote)
+  .inputValidator(normalizeProjectNote)
   .handler(async ({ data }): Promise<ProjectNoteResult> => {
     return {
       ...data,

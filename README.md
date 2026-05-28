@@ -10,6 +10,8 @@ bun run dev
 bun run build
 bun run start
 bun run test
+bun run test:unit
+bun run test:browser
 ```
 
 The dev server runs on port `3000`.
@@ -30,9 +32,15 @@ Required keys are documented in `.env.example`.
 - `src/routes/__root.tsx`: document shell, styles, scripts, and TanStack Devtools.
 - `src/routes/index.tsx`: starter dashboard using TanStack Query and TanStack Form.
 - `src/features/starter/starter-functions.ts`: Start server functions and reusable query options.
+- `src/**/*.unit.test.ts`: Vitest unit tests in the Node.js runtime.
+- `src/**/*.browser.test.tsx`: Vitest Browser Mode component tests with `vitest-browser-react`.
 - `instrument.server.mjs`: Sentry server instrumentation.
 - `vite.config.ts`: Vite, TanStack Start, Nitro Bun preset, Tailwind, and React plugins.
 - `Dockerfile`: Bun-based production container.
+
+## Testing
+
+Unit tests run in the normal Node.js runtime. Component tests run in Vitest Browser Mode with Playwright Chromium and `vitest-browser-react`; Testing Library is intentionally not installed.
 
 ## Docker
 

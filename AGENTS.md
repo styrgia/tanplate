@@ -26,6 +26,7 @@ The app was created from the Blank template in `my-tanstack-app`, then moved int
 - TanStack Devtools with the Router panel in `src/routes/__root.tsx`.
 - TanStack Query through `@tanstack/react-query` and `@tanstack/react-router-ssr-query`.
 - TanStack Form through `@tanstack/react-form`.
+- Vitest unit tests in Node and component tests in Vitest Browser Mode through `@vitest/browser-playwright` and `vitest-browser-react`.
 - Nitro with the Bun preset for server output.
 - Bun is the package manager and runtime. Use `bun install`, `bun run dev`, `bun run build`, and `bun run start`.
 
@@ -45,6 +46,7 @@ Local env values belong in `.env.local`, which is intentionally ignored by git. 
 - The root route uses `createRootRouteWithContext` so route loaders can access `queryClient`.
 - Server-only work belongs in `createServerFn`; loaders are isomorphic and must not import DB, filesystem, or secrets directly.
 - `src/features/starter/starter-functions.ts` contains the starter server functions and reusable query options.
+- Test files use suffix conventions: `*.unit.test.ts` for Node.js runtime tests and `*.browser.test.tsx` for browser component tests.
 
 ## Deployment Notes
 
@@ -60,6 +62,7 @@ Local env values belong in `.env.local`, which is intentionally ignored by git. 
 - `devtools()` must stay first in `vite.config.ts`; `tanstackStart()` must remain before `viteReact()`.
 - Bun blocks unknown lifecycle scripts. `@sentry/cli` is listed in `trustedDependencies` because the Sentry add-on needs its postinstall.
 - Do not switch this app to Next.js, Remix, or `react-router-dom` patterns.
+- Do not add `@testing-library/*`; component tests should use `vitest-browser-react` and Vitest browser locators.
 
 ## Next Steps
 
