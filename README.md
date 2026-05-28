@@ -51,13 +51,18 @@ Environment values are validated through `src/env/client.ts` and `src/env/server
 
 - `src/router.tsx`: TanStack Router setup, per-router `QueryClient`, Query SSR hydration, scroll restoration, and intent preloading.
 - `src/routes/__root.tsx`: document shell, styles, scripts, and TanStack Devtools with Router, Query, and Form panels.
-- `src/routes/index.tsx`: starter dashboard using TanStack Query and TanStack Form.
-- `src/features/starter/starter-functions.ts`: Start server functions and reusable query options.
+- `src/routes`: TanStack file routes. Route files own URL shape, guards, search validation, loaders, head metadata, and page wiring.
+- `src/features`: vertical product modules such as `auth`, `catalog`, `orders`, and future business domains.
 - `src/components/ui`: reusable Base UI-backed components with variants, tests, stories, and browser screenshots.
 - `src/components/form`: TanStack Form app hook, shared form contexts, field components, and submit button.
+- `src/components/patterns`: shared app-level UI compositions when they are not tied to one business domain, for example page headers, empty states, filter toolbars, and confirmation dialogs.
+- `src/components/<component>`: reusable specialized components that are not primitives and already have a clear shared purpose, for example markdown, table, image, and code block rendering.
 - `src/api/openapi`: OpenAPI source contracts, Redocly config, and bundled output.
 - `src/api/generated`: generated OpenAPI clients, SDKs, Zod schemas, and TanStack Query helpers. Regenerate instead of hand-editing.
 - `src/env`: typed environment validation for client and server code.
+- `src/i18n` and `src/paraglide`: localization configuration and generated message/runtime output.
+- `src/seo`: head metadata and sitemap helpers.
+- `src/utils`: small domain-free libraries and pure helpers. Prefer feature-local helpers when logic belongs to one feature.
 - `src/**/*.unit.test.ts`: Vitest unit tests in the Node.js runtime.
 - `src/**/*.browser.test.tsx`: Vitest Browser Mode component tests with `vitest-browser-react`.
 - `.storybook`: Storybook 10 configuration for TanStack React stories.
@@ -70,6 +75,29 @@ Environment values are validated through `src/env/client.ts` and `src/env/server
 TanStack Start code is isomorphic by default. Put server-only work in `createServerFn` or other Start server-only boundaries; route loaders must not import database clients, filesystem code, or secrets directly.
 
 The root route uses `createRootRouteWithContext` so route loaders can access the per-router `QueryClient`. `defaultPreloadStaleTime` is `0`, which keeps Router preloading from competing with TanStack Query caching.
+
+This app uses a vertical-slice structure with a thin shared layer. Keep business logic inside `src/features/<feature>` and keep `src/routes` thin. Route files should compose feature APIs/components instead of becoming large page implementations.
+
+Authentication belongs in `src/features/auth`. It is a cross-cutting product feature, not a generic utility and not part of the OpenAPI/generated client layer. Auth routes in `src/routes/auth/**`, `src/routes/sign-in.tsx`, and auth guards should call into the feature module.
+
+Page-local components should live next to the route in a shared ignored `-components` folder, for example:
+
+```txt
+src/routes/_authenticated/dashboard.tsx
+src/routes/_authenticated/-components/
+  dashboard-page.tsx
+  dashboard-kpi-grid.tsx
+  dashboard-activity-feed.tsx
+```
+
+TanStack Router ignores route files and folders prefixed with `-` by default. Use `-components` for components that belong to routes in that directory. When several sibling routes share one `-components` folder, prefix filenames with the route name or group them in route-named subfolders.
+
+Shared UI follows these boundaries:
+
+- `src/components/ui`: primitives only. No business words, routes, or feature imports.
+- `src/components/form`: app-wide TanStack Form adapters and fields.
+- `src/components/patterns`: reusable non-domain compositions.
+- `src/features/<feature>/components`: domain-specific components such as product cards, order status badges, and auth provider buttons.
 
 ## Testing
 
