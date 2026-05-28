@@ -1,58 +1,87 @@
 {
-  "name": "tanplate",
-  "private": true,
-  "type": "module",
-  "imports": {
-    "#/*": "./src/*"
-  },
-  "scripts": {
-    "dev": "dotenv -e .env.local -- sh -c \"NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000\"",
-    "build": "vite build && cp instrument.server.mjs .output/server",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:unit": "vitest run --project unit",
-    "test:browser": "vitest run --project browser",
-    "start": "bun --import ./.output/server/instrument.server.mjs .output/server/index.mjs"
-  },
-  "dependencies": {
-    "@sentry/tanstackstart-react": "10.54.0",
-    "@tailwindcss/vite": "4.3.0",
-    "@tanstack/react-devtools": "0.10.5",
-    "@tanstack/react-form": "1.32.1",
-    "@tanstack/react-query": "5.100.14",
-    "@tanstack/react-query-devtools": "5.100.11",
-    "@tanstack/react-router": "1.170.8",
-    "@tanstack/react-router-devtools": "1.167.0",
-    "@tanstack/react-router-ssr-query": "1.167.0",
-    "@tanstack/react-start": "1.168.14",
-    "@tanstack/router-plugin": "1.168.11",
-    "dotenv-cli": "11.0.0",
-    "lucide-react": "1.16.0",
-    "nitro": "npm:nitro-nightly@3.0.260522-beta",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "tailwindcss": "4.3.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "0.5.19",
-    "@tanstack/devtools-vite": "0.7.0",
-    "@types/node": "25.9.1",
-    "@types/react": "19.2.15",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
-    "@vitest/browser-playwright": "4.1.7",
-    "vite": "8.0.14",
-    "vitest": "4.1.7",
-    "vitest-browser-react": "2.2.0",
-    "typescript": "6.0.3"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
+    "name": "tanplate",
+    "private": true,
+    "type": "module",
+    "imports": {
+        "#/*": "./src/*"
+    },
+    "scripts": {
+        "dev": "dotenv -e .env.local -- sh -c \"NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000\"",
+        "build": "vite build && cp instrument.server.mjs .output/server",
+        "preview": "vite preview",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix",
+        "fmt": "oxfmt",
+        "fmt:check": "oxfmt --check",
+        "typecheck": "tsc --noEmit",
+        "api:lint": "redocly lint api@v1 --config src/api/openapi/redocly.yaml",
+        "api:bundle": "mkdir -p src/api/openapi/dist && redocly bundle api@v1 --config src/api/openapi/redocly.yaml --output src/api/openapi/dist/openapi.yaml",
+        "api:generate": "openapi-ts",
+        "api:watch": "openapi-ts --watch",
+        "test": "vitest run",
+        "test:unit": "vitest run --project unit",
+        "test:browser": "vitest run --project browser",
+        "prepare": "lefthook install",
+        "start": "bun --import ./.output/server/instrument.server.mjs .output/server/index.mjs",
+        "storybook": "storybook dev -p 6006",
+        "build-storybook": "storybook build"
+    },
+    "dependencies": {
+        "@base-ui/react": "1.5.0",
+        "@sentry/tanstackstart-react": "10.54.0",
+        "@t3-oss/env-core": "0.13.11",
+        "@t3-oss/env-nextjs": "0.13.11",
+        "@tailwindcss/vite": "4.3.0",
+        "@tanstack/react-devtools": "0.10.5",
+        "@tanstack/react-form": "1.32.1",
+        "@tanstack/react-form-devtools": "0.2.27",
+        "@tanstack/react-query": "5.100.14",
+        "@tanstack/react-query-devtools": "5.100.11",
+        "@tanstack/react-router": "1.170.8",
+        "@tanstack/react-router-devtools": "1.167.0",
+        "@tanstack/react-router-ssr-query": "1.167.0",
+        "@tanstack/react-start": "1.168.14",
+        "@tanstack/router-plugin": "1.168.11",
+        "class-variance-authority": "0.7.1",
+        "clsx": "2.1.1",
+        "dotenv-cli": "11.0.0",
+        "lucide-react": "1.16.0",
+        "nitro": "npm:nitro-nightly@3.0.260522-beta",
+        "react": "19.2.6",
+        "react-dom": "19.2.6",
+        "tailwind-merge": "3.5.0",
+        "tailwindcss": "4.3.0",
+        "zod": "4.4.3"
+    },
+    "devDependencies": {
+        "@hey-api/openapi-ts": "0.97.2",
+        "@redocly/cli": "2.31.2",
+        "@tailwindcss/typography": "0.5.19",
+        "@tanstack/devtools-vite": "0.7.0",
+        "@types/node": "25.9.1",
+        "@types/react": "19.2.15",
+        "@types/react-dom": "19.2.3",
+        "@vitejs/plugin-react": "6.0.2",
+        "@vitest/browser-playwright": "4.1.7",
+        "eslint-plugin-better-tailwindcss": "4.5.0",
+        "lefthook": "2.1.8",
+        "oxfmt": "0.51.0",
+        "oxlint": "1.66.0",
+        "typescript": "6.0.3",
+        "vite": "8.0.14",
+        "vitest": "4.1.7",
+        "@storybook/addon-docs": "10.4.0",
+        "@storybook/tanstack-react": "10.4.0",
+        "storybook": "10.4.0",
+        "vitest-browser-react": "2.2.0"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild",
+            "lightningcss"
+        ]
+    },
+    "trustedDependencies": [
+        "@sentry/cli"
     ]
-  },
-  "trustedDependencies": [
-    "@sentry/cli"
-  ]
 }

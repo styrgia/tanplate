@@ -1,0 +1,9 @@
+extends:
+    - recommended
+
+rules:
+    security-defined: off
+
+apis:
+    api@v1:
+        root: ./openapi.yaml

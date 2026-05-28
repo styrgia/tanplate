@@ -1,0 +1,27 @@
+{
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "printWidth": 100,
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": false,
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "bracketSameLine": false,
+    "arrowParens": "always",
+    "endOfLine": "lf",
+    "insertFinalNewline": true,
+    "sortPackageJson": false,
+    "ignorePatterns": [
+        ".output/**",
+        ".nitro/**",
+        ".tanstack/**",
+        ".vinxi/**",
+        "dist/**",
+        "dist-ssr/**",
+        "node_modules/**",
+        "src/api/generated/**",
+        "src/routeTree.gen.ts"
+    ]
+}
