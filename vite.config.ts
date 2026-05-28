@@ -7,6 +7,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
+import svgr from 'vite-plugin-svgr'
 
 import { resolveSitemapHost } from './src/seo/sitemap'
 
@@ -22,6 +23,7 @@ const config = defineConfig(({ mode }) => {
         resolve: { tsconfigPaths: true },
         plugins: [
             devtools(),
+            svgr(),
             paraglideVitePlugin({
                 project: './project.inlang',
                 outdir: './src/paraglide',

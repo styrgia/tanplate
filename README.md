@@ -27,6 +27,9 @@ The dev server runs on port `3000`.
 | `bun run test`                      | Run all Vitest projects.                                                        |
 | `bun run test:unit`                 | Run Node.js unit tests.                                                         |
 | `bun run test:browser`              | Run browser component tests in Playwright Chromium.                             |
+| `bun run test:e2e`                  | Run Playwright end-to-end tests against the app.                                |
+| `bun run test:e2e:ui`               | Open the Playwright UI runner.                                                  |
+| `bun run test:e2e:debug`            | Run Playwright in headed debug mode.                                            |
 | `bun run api:lint`                  | Lint the OpenAPI contracts with Redocly.                                        |
 | `bun run api:bundle`                | Bundle the OpenAPI contracts to `src/api/openapi/dist/*.yaml`.                  |
 | `bun run api:generate`              | Generate fetch clients, Zod schemas, SDKs, and TanStack Query hooks.            |
@@ -71,6 +74,8 @@ The root route uses `createRootRouteWithContext` so route loaders can access the
 ## Testing
 
 Unit tests run in the normal Node.js runtime. Component tests run in Vitest Browser Mode with Playwright Chromium and `vitest-browser-react`; Testing Library is intentionally not installed.
+
+End-to-end tests live in `e2e` and run through Playwright Test. `bun run test:e2e` starts the local dev server automatically through `playwright.config.ts`, or you can point tests at an existing deployment with `PLAYWRIGHT_BASE_URL=https://example.com bun run test:e2e`.
 
 ## OpenAPI Codegen
 
