@@ -5,6 +5,9 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
     plugins: [viteReact()],
+    optimizeDeps: {
+        include: ['@unpic/react'],
+    },
     resolve: {
         alias: {
             '#': fileURLToPath(new URL('src', import.meta.url)),
