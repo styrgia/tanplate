@@ -1,0 +1,20 @@
+{
+    "$schema": "https://inlang.com/schema/inlang-message-format",
+    "home_badge": "TanStack Start",
+    "home_title": "Bun-ready starter workspace",
+    "home_description": "A blank Start app with Tailwind, Sentry, Query hydration, Form state, and Nitro configured for Bun containers.",
+    "language_switcher_label": "Language",
+    "runtime_label": "Runtime",
+    "query_status_title": "Query-backed status",
+    "last_server_response": "Last server response: {generatedAt}",
+    "form_handoff_title": "Form handoff",
+    "form_handoff_description": "Submit a setup note through TanStack Form.",
+    "name_label": "Name",
+    "next_step_label": "Next step",
+    "contact_name_error": "Use at least 2 characters.",
+    "next_step_error": "Use at least 8 characters.",
+    "save_note": "Save note",
+    "saving": "Saving",
+    "save_error": "Something went wrong.",
+    "saved_for": "Saved for {contactName}:"
+}

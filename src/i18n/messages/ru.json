@@ -1,0 +1,20 @@
+{
+    "$schema": "https://inlang.com/schema/inlang-message-format",
+    "home_badge": "TanStack Start",
+    "home_title": "Стартовый workspace для Bun",
+    "home_description": "Blank Start приложение с Tailwind, Sentry, Query hydration, состоянием форм и Nitro, настроенным для Bun-контейнеров.",
+    "language_switcher_label": "Язык",
+    "runtime_label": "Runtime",
+    "query_status_title": "Статус через Query",
+    "last_server_response": "Последний ответ сервера: {generatedAt}",
+    "form_handoff_title": "Передача формы",
+    "form_handoff_description": "Отправьте заметку о настройке через TanStack Form.",
+    "name_label": "Имя",
+    "next_step_label": "Следующий шаг",
+    "contact_name_error": "Укажите минимум 2 символа.",
+    "next_step_error": "Укажите минимум 8 символов.",
+    "save_note": "Сохранить заметку",
+    "saving": "Сохраняем",
+    "save_error": "Что-то пошло не так.",
+    "saved_for": "Сохранено для {contactName}:"
+}

@@ -5,6 +5,7 @@ import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
+import { getLocale, getTextDirection } from '#/paraglide/runtime.js'
 import appCss from '../styles.css?url'
 
 type RouterContext = {
@@ -37,7 +38,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en">
+        <html dir={getTextDirection()} lang={getLocale()}>
             <head>
                 <HeadContent />
             </head>

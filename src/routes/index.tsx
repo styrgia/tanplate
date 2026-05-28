@@ -11,6 +11,9 @@ import {
     starterDashboardQueryOptions,
     submitProjectNote,
 } from '#/features/starter/starter-functions'
+import { LOCALE_LABELS } from '#/i18n/config'
+import { m } from '#/paraglide/messages.js'
+import { getLocale, locales, localizeHref, setLocale } from '#/paraglide/runtime.js'
 
 export const Route = createFileRoute('/')({
     loader: ({ context: { queryClient } }) =>
@@ -22,6 +25,7 @@ export function Home() {
     const queryClient = useQueryClient()
     const [submission, setSubmission] = useState<ProjectNoteResult | null>(null)
     const { data } = useSuspenseQuery(starterDashboardQueryOptions())
+    const currentLocale = getLocale()
 
     const saveNote = useMutation({
         mutationFn: (value: ProjectNoteInput) => submitProjectNote({ data: value }),
@@ -48,21 +52,40 @@ export function Home() {
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
                 <header className="flex flex-col gap-4 border-b border-zinc-200 pb-6 md:flex-row md:items-end md:justify-between">
                     <div className="max-w-3xl">
-                        <p className="text-sm font-semibold text-emerald-700">TanStack Start</p>
+                        <p className="text-sm font-semibold text-emerald-700">{m.home_badge()}</p>
                         <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
-                            Bun-ready starter workspace
+                            {m.home_title()}
                         </h1>
                         <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
-                            A blank Start app with Tailwind, Sentry, Query hydration, Form state,
-                            and Nitro configured for Bun containers.
+                            {m.home_description()}
                         </p>
                     </div>
-                    <div className="rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm">
-                        <div className="flex items-center gap-3">
-                            <Terminal aria-hidden="true" className="h-5 w-5 text-sky-700" />
-                            <div>
-                                <p className="text-sm font-medium">Runtime</p>
-                                <p className="text-sm text-zinc-600">{data.runtime}</p>
+                    <div className="flex flex-col gap-3 sm:flex-row md:items-center">
+                        <nav
+                            aria-label={m.language_switcher_label()}
+                            className="flex items-center gap-2"
+                        >
+                            {locales.map((locale) => (
+                                <a
+                                    aria-current={locale === currentLocale ? 'page' : undefined}
+                                    className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 aria-[current=page]:border-emerald-600 aria-[current=page]:bg-emerald-50 aria-[current=page]:text-emerald-800"
+                                    href={localizeHref('/', { locale })}
+                                    key={locale}
+                                    onClick={() => {
+                                        void setLocale(locale, { reload: false })
+                                    }}
+                                >
+                                    {LOCALE_LABELS[locale]}
+                                </a>
+                            ))}
+                        </nav>
+                        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <Terminal aria-hidden="true" className="h-5 w-5 text-sky-700" />
+                                <div>
+                                    <p className="text-sm font-medium">{m.runtime_label()}</p>
+                                    <p className="text-sm text-zinc-600">{data.runtime}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -79,13 +102,14 @@ export function Home() {
                         <div className="flex items-center gap-3">
                             <Database aria-hidden="true" className="h-5 w-5 text-cyan-700" />
                             <div>
-                                <h2 className="text-xl font-semibold">Query-backed status</h2>
+                                <h2 className="text-xl font-semibold">{m.query_status_title()}</h2>
                                 <p className="text-sm text-zinc-600">
-                                    Last server response:{' '}
-                                    {new Intl.DateTimeFormat('en', {
-                                        dateStyle: 'medium',
-                                        timeStyle: 'medium',
-                                    }).format(new Date(data.generatedAt))}
+                                    {m.last_server_response({
+                                        generatedAt: new Intl.DateTimeFormat(currentLocale, {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'medium',
+                                        }).format(new Date(data.generatedAt)),
+                                    })}
                                 </p>
                             </div>
                         </div>
@@ -109,9 +133,9 @@ export function Home() {
                         <div className="flex items-center gap-3">
                             <SquarePen aria-hidden="true" className="h-5 w-5 text-violet-700" />
                             <div>
-                                <h2 className="text-xl font-semibold">Form handoff</h2>
+                                <h2 className="text-xl font-semibold">{m.form_handoff_title()}</h2>
                                 <p className="text-sm text-zinc-600">
-                                    Submit a setup note through TanStack Form.
+                                    {m.form_handoff_description()}
                                 </p>
                             </div>
                         </div>
@@ -130,13 +154,13 @@ export function Home() {
                                     onChange: ({ value }) =>
                                         value.trim().length >= 2
                                             ? undefined
-                                            : 'Use at least 2 characters.',
+                                            : m.contact_name_error(),
                                 }}
                             >
                                 {(field) => (
                                     <field.TextField
                                         controlClassName="h-11 text-base font-normal"
-                                        label="Name"
+                                        label={m.name_label()}
                                     />
                                 )}
                             </form.AppField>
@@ -145,15 +169,13 @@ export function Home() {
                                 name="nextStep"
                                 validators={{
                                     onChange: ({ value }) =>
-                                        value.trim().length >= 8
-                                            ? undefined
-                                            : 'Use at least 8 characters.',
+                                        value.trim().length >= 8 ? undefined : m.next_step_error(),
                                 }}
                             >
                                 {(field) => (
                                     <field.TextareaField
                                         controlClassName="h-auto min-h-28 resize-y py-2 text-base font-normal leading-6"
-                                        label="Next step"
+                                        label={m.next_step_label()}
                                     />
                                 )}
                             </form.AppField>
@@ -161,7 +183,7 @@ export function Home() {
                             <form.AppForm>
                                 <form.SubmitButton className="h-11" disabled={saveNote.isPending}>
                                     <Send aria-hidden="true" className="h-4 w-4" />
-                                    {saveNote.isPending ? 'Saving' : 'Save note'}
+                                    {saveNote.isPending ? m.saving() : m.save_note()}
                                 </form.SubmitButton>
                             </form.AppForm>
 
@@ -173,7 +195,7 @@ export function Home() {
 
                             {submission ? (
                                 <p className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm leading-6 text-emerald-800">
-                                    Saved for {submission.contactName}:{' '}
+                                    {m.saved_for({ contactName: submission.contactName })}{' '}
                                     <span className="font-medium">{submission.nextStep}</span>
                                 </p>
                             ) : null}
@@ -190,5 +212,5 @@ function getErrorMessage(error: unknown) {
         return error.message
     }
 
-    return 'Something went wrong.'
+    return m.save_error()
 }
