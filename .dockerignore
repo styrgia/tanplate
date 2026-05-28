@@ -1,0 +1,15 @@
+.git
+.idea
+.vscode
+node_modules
+.output
+.nitro
+.tanstack
+.wrangler
+.vinxi
+dist
+dist-ssr
+*.local
+.env
+__unconfig*
+todos.json
