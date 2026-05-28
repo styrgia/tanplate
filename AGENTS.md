@@ -44,6 +44,7 @@ The app was created from the Blank template in `my-tanstack-app`, then moved int
 Local env values belong in `.env.local`, which is intentionally ignored by git. Keep `.env.example` committed with key names only. Empty strings are treated as unset by the env validators.
 
 - `VITE_SENTRY_DSN`: enables Sentry when set. If empty, the app logs that Sentry is disabled.
+- `SITE_URL`: canonical site URL used by TanStack Start when writing `sitemap.xml` during builds. If unset, local builds fall back to `http://localhost:3000`.
 - `SENTRY_ORG`: Sentry org for release/source map workflows.
 - `SENTRY_PROJECT`: Sentry project for release/source map workflows.
 - `SENTRY_AUTH_TOKEN`: secret token for Sentry release/source map workflows. Never commit a real value.

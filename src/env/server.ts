@@ -8,6 +8,7 @@ type ServerRuntimeEnv = {
     SENTRY_AUTH_TOKEN?: string
     SENTRY_ORG?: string
     SENTRY_PROJECT?: string
+    SITE_URL?: string
     SKIP_ENV_VALIDATION?: string
     VITE_SENTRY_DSN?: string
 }
@@ -22,6 +23,7 @@ export function createServerEnv(runtimeEnv: ServerRuntimeEnv = readServerRuntime
             SENTRY_AUTH_TOKEN: z.string().min(1).optional(),
             SENTRY_ORG: z.string().min(1).optional(),
             SENTRY_PROJECT: z.string().min(1).optional(),
+            SITE_URL: z.string().url().optional(),
             VITE_SENTRY_DSN: z.string().url().optional(),
         },
         shared: {
@@ -32,6 +34,7 @@ export function createServerEnv(runtimeEnv: ServerRuntimeEnv = readServerRuntime
             SENTRY_AUTH_TOKEN: runtimeEnv.SENTRY_AUTH_TOKEN,
             SENTRY_ORG: runtimeEnv.SENTRY_ORG,
             SENTRY_PROJECT: runtimeEnv.SENTRY_PROJECT,
+            SITE_URL: runtimeEnv.SITE_URL,
             VITE_SENTRY_DSN: runtimeEnv.VITE_SENTRY_DSN,
         },
         emptyStringAsUndefined: true,

@@ -1,12 +1,13 @@
 import type { QueryClient } from '@tanstack/react-query'
+import { Suspense, lazy } from 'react'
 import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
-import { formDevtoolsPlugin } from '@tanstack/react-form-devtools'
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import { getLocale, getTextDirection } from '#/paraglide/runtime.js'
 import appCss from '../styles.css?url'
+
+const AppTanStackDevtools = import.meta.env.DEV
+    ? lazy(() => import('#/devtools/tanstack-devtools'))
+    : null
 
 type RouterContext = {
     queryClient: QueryClient
@@ -21,9 +22,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             {
                 name: 'viewport',
                 content: 'width=device-width, initial-scale=1',
-            },
-            {
-                title: 'TanStack Start Bun Starter',
             },
         ],
         links: [
@@ -44,22 +42,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </head>
             <body>
                 {children}
-                <TanStackDevtools
-                    config={{
-                        position: 'bottom-right',
-                    }}
-                    plugins={[
-                        {
-                            name: 'TanStack Query',
-                            render: <ReactQueryDevtoolsPanel />,
-                        },
-                        {
-                            name: 'TanStack Router',
-                            render: <TanStackRouterDevtoolsPanel />,
-                        },
-                        formDevtoolsPlugin(),
-                    ]}
-                />
+
+                {AppTanStackDevtools ? (
+                    <Suspense fallback={null}>
+                        <AppTanStackDevtools />
+                    </Suspense>
+                ) : null}
+
                 <Scripts />
             </body>
         </html>

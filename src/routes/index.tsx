@@ -5,6 +5,7 @@ import { Database, Send, SquarePen, Terminal } from 'lucide-react'
 
 import { useAppForm } from '#/components/form'
 import { IntegrationCard } from '#/features/starter/integration-card'
+import { RenderingShowcase } from '#/features/starter/rendering-showcase'
 import {
     type ProjectNoteInput,
     type ProjectNoteResult,
@@ -14,10 +15,34 @@ import {
 import { LOCALE_LABELS } from '#/i18n/config'
 import { m } from '#/paraglide/messages.js'
 import { getLocale, locales, localizeHref, setLocale } from '#/paraglide/runtime.js'
+import { createSeoHead, getSeoSiteUrl } from '#/seo'
 
 export const Route = createFileRoute('/')({
     loader: ({ context: { queryClient } }) =>
         queryClient.ensureQueryData(starterDashboardQueryOptions()),
+    head: () => {
+        const currentLocale = getLocale()
+
+        return createSeoHead({
+            alternates: locales.map((locale) => ({
+                href: localizeHref('/', { locale }),
+                hrefLang: locale,
+            })),
+            description: m.home_description(),
+            jsonLd: {
+                '@context': 'https://schema.org',
+                '@type': 'WebApplication',
+                applicationCategory: 'DeveloperApplication',
+                description: m.home_description(),
+                name: 'TanStack Start Bun Starter',
+                operatingSystem: 'Any',
+            },
+            locale: currentLocale,
+            path: localizeHref('/', { locale: currentLocale }),
+            siteUrl: getSeoSiteUrl(),
+            title: m.home_title(),
+        })
+    },
     component: Home,
 })
 
@@ -96,6 +121,8 @@ export function Home() {
                         <IntegrationCard integration={integration} key={integration} />
                     ))}
                 </section>
+
+                <RenderingShowcase />
 
                 <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                     <div className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
