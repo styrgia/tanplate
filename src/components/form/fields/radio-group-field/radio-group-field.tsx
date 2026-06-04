@@ -58,7 +58,15 @@ export function RadioGroupField({
                 {options.map((option) => (
                     <label
                         className={cn(
-                            'flex cursor-pointer items-start gap-3 rounded-md border border-zinc-200 bg-white p-3 text-sm text-zinc-950 transition hover:bg-zinc-50 has-[[data-checked]]:border-zinc-950 has-[[data-disabled]]:cursor-not-allowed has-[[data-disabled]]:opacity-60',
+                            `
+                              flex cursor-pointer items-start gap-3 rounded-md
+                              border border-zinc-200 bg-white p-3 text-sm
+                              text-zinc-950 transition
+                              hover:bg-zinc-50
+                              has-data-checked:border-zinc-950
+                              has-data-disabled:cursor-not-allowed
+                              has-data-disabled:opacity-60
+                            `,
                             optionClassName,
                         )}
                         key={String(option.value)}

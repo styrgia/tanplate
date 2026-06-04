@@ -1,14 +1,17 @@
 import { useEffect, useState, type ComponentPropsWithoutRef } from 'react'
 import parse from 'html-react-parser'
-import { cva } from 'class-variance-authority'
 
 import { cn } from '../ui/shared/classes'
 
 import { highlightCode, type HighlightedCodeResult, type HighlightCodeOptions } from '#/utils/shiki'
 
-const codeBlockVariants = cva(
-    'text-sm leading-6 [&_.shiki]:overflow-x-auto [&_.shiki]:rounded-md [&_.shiki]:border [&_.shiki]:border-zinc-200 [&_.shiki]:p-4 [&_pre]:m-0 [&_pre_code]:text-sm',
-)
+const codeBlockClassName = `
+  text-sm/6
+  [&_.shiki]:overflow-x-auto [&_.shiki]:rounded-md [&_.shiki]:border
+  [&_.shiki]:border-zinc-200 [&_.shiki]:p-4
+  [&_pre]:m-0
+  [&_pre_code]:text-sm
+`
 
 type RawCodeBlockProps = {
     code: string
@@ -60,14 +63,14 @@ export function CodeBlock(props: CodeBlockProps) {
         return (
             <div
                 aria-busy="true"
-                className={cn(codeBlockVariants(), className)}
+                className={cn(codeBlockClassName, className)}
                 {...containerProps}
             />
         )
     }
 
     return (
-        <div className={cn(codeBlockVariants(), className)} {...containerProps}>
+        <div className={cn(codeBlockClassName, className)} {...containerProps}>
             {parse(result.markup)}
         </div>
     )

@@ -10,7 +10,11 @@ const meta = {
         defaultChecked: true,
     },
     render: (args) => (
-        <div className="flex items-center gap-3 text-sm font-medium text-zinc-950">
+        <div
+            className="
+              flex items-center gap-3 text-sm font-medium text-zinc-950
+            "
+        >
             <Checkbox.Root {...args}>
                 <Checkbox.Indicator />
             </Checkbox.Root>

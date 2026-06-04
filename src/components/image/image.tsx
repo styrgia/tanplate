@@ -1,16 +1,34 @@
 import { forwardRef, type ComponentRef } from 'react'
 import { Image as UnpicImage, type ImageProps as UnpicImageProps } from '@unpic/react'
-import { cva } from 'class-variance-authority'
 
 import { cn } from '../ui/shared/classes'
 
-const imageVariants = cva('block')
+const defaultImageFallback = 'ipx' satisfies NonNullable<UnpicImageProps['fallback']>
+const defaultImageOperations = {
+    ipx: {
+        q: 85,
+        f: 'webp',
+    },
+} satisfies NonNullable<UnpicImageProps['operations']>
 
 export type ImageProps = UnpicImageProps
 
 export const Image = forwardRef<ComponentRef<typeof UnpicImage>, ImageProps>(
-    ({ className, ...props }, ref) => (
-        <UnpicImage className={cn(imageVariants(), className)} ref={ref} {...props} />
+    ({ className, fallback = defaultImageFallback, operations, ...props }, ref) => (
+        <UnpicImage
+            className={cn('block', className)}
+            fallback={fallback}
+            operations={{
+                ...defaultImageOperations,
+                ...operations,
+                ipx: {
+                    ...defaultImageOperations.ipx,
+                    ...operations?.ipx,
+                },
+            }}
+            ref={ref}
+            {...props}
+        />
     ),
 )
 

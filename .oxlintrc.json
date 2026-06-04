@@ -17,7 +17,8 @@
             "version": "19.2.6"
         },
         "better-tailwindcss": {
-            "entryPoint": "src/styles.css"
+            "entryPoint": "src/styles.css",
+            "variables": ["^.*[Cc]lassNames?$", "^.*[Cc]lasses$", "^styles?$"]
         }
     },
     "categories": {
@@ -26,7 +27,18 @@
         "perf": "warn"
     },
     "rules": {
+        "better-tailwindcss/enforce-canonical-classes": "warn",
+        "better-tailwindcss/enforce-consistent-class-order": "warn",
+        "better-tailwindcss/enforce-consistent-line-wrapping": [
+            "warn",
+            {
+                "strictness": "loose"
+            }
+        ],
         "better-tailwindcss/no-conflicting-classes": "error",
+        "better-tailwindcss/no-deprecated-classes": "warn",
+        "better-tailwindcss/no-duplicate-classes": "warn",
+        "better-tailwindcss/no-unnecessary-whitespace": "warn",
         "better-tailwindcss/no-unknown-classes": "error",
         "import/no-unassigned-import": "off",
         "react/react-in-jsx-scope": "off"

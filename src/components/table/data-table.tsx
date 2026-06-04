@@ -167,7 +167,13 @@ function DataTableHeader<TData extends RowData, TValue>({
     return (
         <button
             aria-label={getSortButtonLabel(label, sorted)}
-            className="inline-flex min-h-6 w-full items-center justify-between gap-2 rounded-sm text-left outline-none transition hover:text-zinc-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+            className="
+              inline-flex min-h-6 w-full items-center justify-between gap-2
+              rounded-sm text-left transition outline-none
+              hover:text-zinc-950
+              focus-visible:ring-2 focus-visible:ring-emerald-600
+              focus-visible:ring-offset-2
+            "
             onClick={header.column.getToggleSortingHandler()}
             type="button"
         >
@@ -197,7 +203,10 @@ function DataTablePagination<TData extends RowData>({
     return (
         <div
             aria-label="Table pagination"
-            className="flex flex-col gap-3 text-sm text-zinc-600 sm:flex-row sm:items-center sm:justify-between"
+            className="
+              flex flex-col gap-3 text-sm text-zinc-600
+              sm:flex-row sm:items-center sm:justify-between
+            "
         >
             <div className="font-medium text-zinc-700">
                 {firstRow}-{lastRow} of {totalRows}
@@ -207,7 +216,13 @@ function DataTablePagination<TData extends RowData>({
                     Rows
                 </label>
                 <select
-                    className="h-9 rounded-md border border-zinc-300 bg-white px-2 text-sm font-medium text-zinc-950 outline-none transition hover:bg-zinc-50 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                    className="
+                      h-9 rounded-md border border-zinc-300 bg-white px-2
+                      text-sm font-medium text-zinc-950 transition outline-none
+                      hover:bg-zinc-50
+                      focus-visible:ring-2 focus-visible:ring-emerald-600
+                      focus-visible:ring-offset-2
+                    "
                     id={pageSizeId}
                     onChange={(event) => table.setPageSize(Number(event.target.value))}
                     value={pagination.pageSize}
@@ -268,7 +283,16 @@ function PaginationButton({
     return (
         <button
             aria-label={label}
-            className="inline-flex size-9 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-700 transition hover:bg-zinc-50 active:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-400"
+            className="
+              inline-flex size-9 items-center justify-center rounded-md border
+              border-zinc-300 bg-white text-zinc-700 transition
+              hover:bg-zinc-50
+              focus-visible:ring-2 focus-visible:ring-emerald-600
+              focus-visible:ring-offset-2 focus-visible:outline-none
+              active:bg-zinc-100
+              disabled:cursor-not-allowed disabled:bg-zinc-100
+              disabled:text-zinc-400
+            "
             disabled={disabled}
             onClick={onClick}
             type="button"
@@ -289,7 +313,7 @@ function SortIcon({ direction }: { direction: false | 'asc' | 'desc' }) {
         return <ChevronDown aria-hidden="true" className={iconClassName} />
     }
 
-    return <ChevronsUpDown aria-hidden="true" className={cn(iconClassName, 'text-zinc-400')} />
+    return <ChevronsUpDown aria-hidden="true" className={cn(iconClassName, `text-zinc-400`)} />
 }
 
 function getAriaSort<TData extends RowData, TValue>(header: Header<TData, TValue>) {

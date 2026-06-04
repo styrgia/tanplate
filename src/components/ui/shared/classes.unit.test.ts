@@ -5,7 +5,7 @@ import { cn } from './classes'
 test('combines conditional class values and merges Tailwind conflicts', () => {
     expect(
         cn(
-            'px-2 py-1 bg-white',
+            'bg-white px-2 py-1',
             ['text-sm', false, 'font-medium'],
             {
                 'bg-white': true,
