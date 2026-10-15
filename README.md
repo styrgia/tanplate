@@ -1,6 +1,6 @@
 # Tanplate
 
-Tanplate is a TanStack Start application workspace running on Bun. It started as the Blank TanStack Start template and now includes Tailwind CSS v4, Sentry, Nitro Bun output, TanStack Query/Form/Devtools, Storybook, OpenAPI code generation, a Base UI component layer, and Vitest test projects.
+Tanplate is a TanStack Start application workspace running on Bun. It started as the Blank TanStack Start template and now includes Tailwind CSS v4, Sentry, Nitro server output, TanStack Query/Form/Devtools, Storybook, Kubb OpenAPI code generation, a Base UI component layer, and Vitest test projects. Use the Bun version pinned in `packageManager` in `package.json` (also used by the Dockerfile).
 
 ## Quick Start
 
@@ -19,8 +19,7 @@ The dev server runs on port `3000`.
 | `bun install`                       | Install dependencies and Lefthook Git hooks.                                    |
 | `bun run dev`                       | Start Vite/TanStack Start on port `3000` with `.env.local` loaded.              |
 | `bun run build`                     | Build the production app and copy Sentry server instrumentation into `.output`. |
-| `bun run start`                     | Run the Nitro Bun production server from `.output/server/index.mjs`.            |
-| `bun run preview`                   | Run Vite preview for the built client output.                                   |
+| `bun run start`                     | Run the Nitro production server with Bun (`PORT` defaults to `3000`).           |
 | `bun run typecheck`                 | Run TypeScript without emitting files.                                          |
 | `bun run lint` / `bun run lint:fix` | Run Oxlint, optionally with fixes.                                              |
 | `bun run fmt:check` / `bun run fmt` | Check or write formatting with Oxfmt.                                           |
@@ -33,6 +32,7 @@ The dev server runs on port `3000`.
 | `bun run api:lint`                  | Lint the OpenAPI contracts with Redocly.                                        |
 | `bun run api:bundle`                | Bundle the OpenAPI contracts to `src/api/openapi/dist/*.yaml`.                  |
 | `bun run api:generate`              | Generate fetch clients, Zod schemas, SDKs, and TanStack Query hooks.            |
+| `bun run api:check`                 | Regenerate both clients and fail if generated files change.                     |
 | `bun run api:watch`                 | Watch the OpenAPI contracts and regenerate on changes.                          |
 | `bun run storybook`                 | Start Storybook on port `6006`.                                                 |
 | `bun run build-storybook`           | Build the static Storybook site.                                                |
@@ -67,7 +67,7 @@ Environment values are validated through `src/env/client.ts` and `src/env/server
 - `src/**/*.browser.test.tsx`: Vitest Browser Mode component tests with `vitest-browser-react`.
 - `.storybook`: Storybook 10 configuration for TanStack React stories.
 - `instrument.server.mjs`: Sentry server instrumentation.
-- `vite.config.ts`: Vite, TanStack Start, Nitro Bun preset, Tailwind, and React plugins.
+- `vite.config.ts`: Vite, TanStack Start, Nitro, Tailwind, and React plugins. Nitro emits the Node-compatible server preset so prerendering works during builds; Bun runs that output in production.
 - `Dockerfile`: Bun-based production container.
 
 ## Architecture Notes
@@ -107,16 +107,33 @@ End-to-end tests live in `e2e` and run through Playwright Test. `bun run test:e2
 
 ## OpenAPI Codegen
 
-OpenAPI code generation is configured with `@hey-api/openapi-ts` in `src/api/openapi-ts.config.ts`.
+OpenAPI code generation uses Kubb 5 in `src/api/kubb.config.ts`, following the separate types/schemas/clients layout from `nextjs-starter`. Native Fetch and React Query plugins generate the request functions, option factories, cache keys, and hooks.
 
 ```bash
 bun run api:lint
 bun run api:bundle
 bun run api:generate
+bun run api:check
 bun run api:watch
 ```
 
-Each API surface gets its own entrypoint, for example `src/api/openapi/catalog/openapi.yaml` and `src/api/openapi/orders/openapi.yaml`. Redocly linting and bundling are configured in `src/api/openapi/redocly.yaml`; `bun run api:bundle` writes bundled schemas to `src/api/openapi/dist/catalog.yaml` and `src/api/openapi/dist/orders.yaml`. The generator uses one job per OpenAPI file and writes separate clients to `src/api/generated/<name>`. The output includes TypeScript request/response/model types, SDK request functions with Zod request and response validation, Zod schemas, and TanStack Query query/mutation hooks.
+Each API surface gets its own entrypoint, for example `src/api/openapi/catalog/openapi.yaml` and `src/api/openapi/orders/openapi.yaml`. `api:generate` lints and bundles both contracts through Redocly before generating separate clients in `src/api/generated/<name>`. Kubb reads the canonical contracts directly, validates OpenAPI, and cleans each API's output before writing it. Commit the generated output and regenerate it instead of editing it manually.
+
+Each output contains `types`, `schemas`, `clients`, and `query` folders with local barrel exports, plus an internal `.kubb` Fetch runtime. Requests and responses are validated with Zod. Standalone clients return `{ status, data, error, response, ... }`, with documented HTTP errors returned by default; pass `throwOnError: true` to throw instead. Schema validation failures reject the call. Query factories and hooks throw HTTP errors and pass Query cancellation to Fetch.
+
+```ts
+import { getCatalogProduct } from '#/api/generated/catalog/clients'
+import { getCatalogProductQueryOptions } from '#/api/generated/catalog/query'
+import { createOrder } from '#/api/generated/orders/clients'
+
+const result = await getCatalogProduct({ path: { productId: 'starter-kit' } })
+const options = getCatalogProductQueryOptions({ path: { productId: 'starter-kit' } })
+const order = await createOrder({ body: { productId: 'starter-kit', quantity: 2 } })
+```
+
+Browser calls use relative same-origin URLs. Server-side calls must pass an absolute `baseURL`; Query factories accept it as their second argument. When sharing one QueryClient across multiple API hosts or authentication contexts, supply a distinct `queryKey` through the hook's `query` options (or use separate QueryClients). The generated default keys contain the operation URL and request parameters.
+
+`api:watch` reruns the full validation, bundling, and generation pipeline when the Kubb config or any source YAML changes, including nested `$ref` files. `api:check` compares every generated filename and content hash, including the hidden runtime, with a fresh generation and reports stale output.
 
 ## Storybook
 

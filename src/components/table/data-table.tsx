@@ -1,10 +1,7 @@
 import { useId, useMemo, useState, type ReactNode } from 'react'
 import {
     flexRender,
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
+    useTable,
     type Header,
     type PaginationState,
     type RowData,
@@ -24,16 +21,17 @@ import {
 
 import { cn } from '../ui/shared/classes'
 import * as Table from './table'
+import { dataTableFeatures, type DataTableFeatures } from './features'
 
 export type DataTableProps<TData extends RowData> = {
-    columns: TableOptions<TData>['columns']
+    columns: TableOptions<DataTableFeatures, TData>['columns']
     data: TData[]
     caption?: ReactNode
     className?: string
     emptyMessage?: ReactNode
     enablePagination?: boolean
     enableSorting?: boolean
-    getRowId?: TableOptions<TData>['getRowId']
+    getRowId?: TableOptions<DataTableFeatures, TData>['getRowId']
     initialPageSize?: number
     initialSorting?: SortingState
     pageSizeOptions?: readonly number[]
@@ -67,14 +65,14 @@ export function DataTable<TData extends RowData>({
         [pageSizeOptions, pagination.pageSize],
     )
 
-    const table = useReactTable({
+    const table = useTable({
+        features: dataTableFeatures,
         columns,
         data,
         enableSorting,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
+        manualPagination: !enablePagination,
         getRowId,
-        getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
+        manualSorting: !enableSorting,
         onPaginationChange: enablePagination ? setPagination : undefined,
         onSortingChange: enableSorting ? setSorting : undefined,
         state: {
@@ -150,7 +148,7 @@ export function DataTable<TData extends RowData>({
 function DataTableHeader<TData extends RowData, TValue>({
     header,
 }: {
-    header: Header<TData, TValue>
+    header: Header<DataTableFeatures, TData, TValue>
 }) {
     const canSort = header.column.getCanSort()
     const sorted = header.column.getIsSorted()
@@ -190,12 +188,12 @@ function DataTablePagination<TData extends RowData>({
     table,
 }: {
     pageSizeOptions: readonly number[]
-    table: TanStackTable<TData>
+    table: TanStackTable<DataTableFeatures, TData>
 }) {
     const pageSizeId = useId()
     const pageCount = Math.max(table.getPageCount(), 1)
-    const pagination = table.getState().pagination
-    const totalRows = table.getPrePaginationRowModel().rows.length
+    const pagination = table.store.state.pagination
+    const totalRows = table.getPrePaginatedRowModel().rows.length
     const pageRows = table.getRowModel().rows.length
     const firstRow = totalRows === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
     const lastRow = totalRows === 0 ? 0 : firstRow + pageRows - 1
@@ -316,7 +314,9 @@ function SortIcon({ direction }: { direction: false | 'asc' | 'desc' }) {
     return <ChevronsUpDown aria-hidden="true" className={cn(iconClassName, `text-zinc-400`)} />
 }
 
-function getAriaSort<TData extends RowData, TValue>(header: Header<TData, TValue>) {
+function getAriaSort<TData extends RowData, TValue>(
+    header: Header<DataTableFeatures, TData, TValue>,
+) {
     const sorted = header.column.getIsSorted()
 
     if (sorted === 'asc') {
@@ -330,7 +330,9 @@ function getAriaSort<TData extends RowData, TValue>(header: Header<TData, TValue
     return undefined
 }
 
-function getHeaderLabel<TData extends RowData, TValue>(header: Header<TData, TValue>) {
+function getHeaderLabel<TData extends RowData, TValue>(
+    header: Header<DataTableFeatures, TData, TValue>,
+) {
     const headerDef = header.column.columnDef.header
 
     if (typeof headerDef === 'string') {

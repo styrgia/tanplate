@@ -33,24 +33,25 @@ export type CodeBlockProps = Omit<
 
 export function CodeBlock(props: CodeBlockProps) {
     const { className, code, lang, result: providedResult, ...containerProps } = props
-    const [result, setResult] = useState<HighlightedCodeResult | null>(providedResult ?? null)
+    const [highlighted, setHighlighted] = useState<{
+        code: string
+        lang: HighlightCodeOptions['lang']
+        result: HighlightedCodeResult
+    } | null>(null)
+    const result =
+        providedResult ??
+        (highlighted?.code === code && highlighted?.lang === lang ? highlighted?.result : null)
 
     useEffect(() => {
-        if (providedResult) {
-            setResult(providedResult)
-            return
-        }
-
-        if (code === undefined) {
+        if (providedResult || code === undefined) {
             return
         }
 
         let isCurrent = true
 
-        setResult(null)
         void highlightCode({ code, lang }).then((nextResult) => {
             if (isCurrent) {
-                setResult(nextResult)
+                setHighlighted({ code, lang, result: nextResult })
             }
         })
 

@@ -13,3 +13,8 @@ dist-ssr
 .env
 __unconfig*
 todos.json
+.vitest
+test-results
+playwright-report
+storybook-static
+debug-storybook.log

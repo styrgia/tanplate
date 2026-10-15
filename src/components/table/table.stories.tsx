@@ -21,7 +21,7 @@ const products: Product[] = [
 
 const columnHelper = createColumnHelper<Product>()
 
-const columns = [
+const columns = columnHelper.columns([
     columnHelper.accessor('name', {
         header: 'Product',
         cell: (info) => <span className="font-medium text-zinc-950">{info.getValue()}</span>,
@@ -38,7 +38,7 @@ const columns = [
         header: 'Status',
         cell: (info) => info.getValue(),
     }),
-]
+])
 
 const meta = {
     title: 'Components/Table/DataTable',

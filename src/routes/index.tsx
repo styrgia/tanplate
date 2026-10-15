@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useHydrated } from '@tanstack/react-router'
 import { Database, Send, SquarePen, Terminal } from 'lucide-react'
 
 import { useAppForm } from '#/components/form'
@@ -47,6 +47,7 @@ export const Route = createFileRoute('/')({
 })
 
 export function Home() {
+    const hydrated = useHydrated()
     const queryClient = useQueryClient()
     const [submission, setSubmission] = useState<ProjectNoteResult | null>(null)
     const { data } = useSuspenseQuery(starterDashboardQueryOptions())
@@ -179,6 +180,7 @@ export function Home() {
                                         generatedAt: new Intl.DateTimeFormat(currentLocale, {
                                             dateStyle: 'medium',
                                             timeStyle: 'medium',
+                                            timeZone: hydrated ? undefined : 'UTC',
                                         }).format(new Date(data.generatedAt)),
                                     })}
                                 </p>
@@ -237,6 +239,7 @@ export function Home() {
                                 {(field) => (
                                     <field.TextField
                                         controlClassName="h-11 text-base font-normal"
+                                        disabled={!hydrated}
                                         label={m.name_label()}
                                     />
                                 )}
@@ -252,13 +255,17 @@ export function Home() {
                                 {(field) => (
                                     <field.TextareaField
                                         controlClassName="h-auto min-h-28 resize-y py-2 text-base font-normal leading-6"
+                                        disabled={!hydrated}
                                         label={m.next_step_label()}
                                     />
                                 )}
                             </form.AppField>
 
                             <form.AppForm>
-                                <form.SubmitButton className="h-11" disabled={saveNote.isPending}>
+                                <form.SubmitButton
+                                    className="h-11"
+                                    disabled={!hydrated || saveNote.isPending}
+                                >
                                     <Send aria-hidden="true" className="size-4" />
                                     {saveNote.isPending ? m.saving() : m.save_note()}
                                 </form.SubmitButton>

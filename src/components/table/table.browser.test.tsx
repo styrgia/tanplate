@@ -12,7 +12,7 @@ type Product = {
 
 const columnHelper = createColumnHelper<Product>()
 
-const columns = [
+const columns = columnHelper.columns([
     columnHelper.accessor('name', {
         header: 'Product',
         cell: (info) => info.getValue(),
@@ -21,7 +21,7 @@ const columns = [
         header: 'Stock',
         cell: (info) => info.getValue(),
     }),
-]
+])
 
 const products = [
     { id: 'coffee', name: 'Coffee', stock: 4 },
@@ -46,15 +46,15 @@ test('sorts rows with TanStack Table sorting state', async () => {
 
     const rows = screen.getByRole('row')
 
-    await expect.element(rows.nth(1)).toHaveTextContent('Cocoa')
-    await expect.element(rows.nth(2)).toHaveTextContent('Coffee')
-    await expect.element(rows.nth(3)).toHaveTextContent('Tea')
+    await expect.element(rows.nth(1).getByRole('cell').first()).toHaveTextContent('Cocoa')
+    await expect.element(rows.nth(2).getByRole('cell').first()).toHaveTextContent('Coffee')
+    await expect.element(rows.nth(3).getByRole('cell').first()).toHaveTextContent('Tea')
 
     await productHeader.click()
 
-    await expect.element(rows.nth(1)).toHaveTextContent('Tea')
-    await expect.element(rows.nth(2)).toHaveTextContent('Coffee')
-    await expect.element(rows.nth(3)).toHaveTextContent('Cocoa')
+    await expect.element(rows.nth(1).getByRole('cell').first()).toHaveTextContent('Tea')
+    await expect.element(rows.nth(2).getByRole('cell').first()).toHaveTextContent('Coffee')
+    await expect.element(rows.nth(3).getByRole('cell').first()).toHaveTextContent('Cocoa')
 })
 
 test('paginates rows when pagination is enabled', async () => {

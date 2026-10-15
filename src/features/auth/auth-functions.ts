@@ -16,7 +16,7 @@ export const getCurrentAuthSession = createServerFn({ method: 'GET' }).handler(a
 })
 
 export const signInWithPassword = createServerFn({ method: 'POST' })
-    .inputValidator(normalizePasswordSignInInput)
+    .validator(normalizePasswordSignInInput)
     .handler(async ({ data }) => {
         setAuthNoStoreHeaders()
 

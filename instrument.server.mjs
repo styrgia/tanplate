@@ -5,9 +5,7 @@ const sentryDsn = import.meta.env?.VITE_SENTRY_DSN ?? process.env.VITE_SENTRY_DS
 if (sentryDsn) {
     Sentry.init({
         dsn: sentryDsn,
-        // Adds request headers and IP for users, for more info visit:
-        // https://docs.sentry.io/platforms/javascript/guides/tanstackstart-react/configuration/options/#sendDefaultPii
-        sendDefaultPii: true,
+        // Sentry 11 collects request headers and user information by default.
         tracesSampleRate: 1,
         replaysSessionSampleRate: 1,
         replaysOnErrorSampleRate: 1,

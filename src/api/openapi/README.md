@@ -19,10 +19,10 @@ To add another API:
 
 1. Create `src/api/openapi/<name>/openapi.yaml`.
 2. Add a matching alias to `src/api/openapi/redocly.yaml`.
-3. Add an input/output job to `src/api/openapi-ts.config.ts`.
+3. Add the API name to `src/api/kubb.config.ts`.
 4. Add matching route handlers under `src/routes/api`.
 5. Add one file per path under `src/api/openapi/<name>/paths`.
 6. Add reusable schemas under `src/api/openapi/<name>/components/schemas`.
-7. Run `bun run api:lint`, `bun run api:bundle`, and `bun run api:generate`.
+7. Run `bun run api:generate` to lint, bundle, and generate both clients, then `bun run api:check` to verify reproducibility.
 
 `bun run api:generate` writes separate clients to `src/api/generated/<name>`, so different OpenAPI files do not overwrite each other.

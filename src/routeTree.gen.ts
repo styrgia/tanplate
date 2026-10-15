@@ -9,23 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthYandexStartRouteImport } from './routes/auth/yandex/start'
-import { Route as AuthYandexCallbackRouteImport } from './routes/auth/yandex/callback'
-import { Route as AuthVkStartRouteImport } from './routes/auth/vk/start'
-import { Route as AuthVkCallbackRouteImport } from './routes/auth/vk/callback'
-import { Route as AuthGoogleStartRouteImport } from './routes/auth/google/start'
-import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
-import { Route as AuthGithubStartRouteImport } from './routes/auth/github/start'
 import { Route as AuthGithubCallbackRouteImport } from './routes/auth/github/callback'
+import { Route as AuthGithubStartRouteImport } from './routes/auth/github/start'
+import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
+import { Route as AuthGoogleStartRouteImport } from './routes/auth/google/start'
+import { Route as AuthVkCallbackRouteImport } from './routes/auth/vk/callback'
+import { Route as AuthVkStartRouteImport } from './routes/auth/vk/start'
+import { Route as AuthYandexCallbackRouteImport } from './routes/auth/yandex/callback'
+import { Route as AuthYandexStartRouteImport } from './routes/auth/yandex/start'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignInRoute = SignInRouteImport.update({
@@ -33,13 +37,9 @@ const SignInRoute = SignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -47,34 +47,9 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthYandexStartRoute = AuthYandexStartRouteImport.update({
-  id: '/auth/yandex/start',
-  path: '/auth/yandex/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthYandexCallbackRoute = AuthYandexCallbackRouteImport.update({
-  id: '/auth/yandex/callback',
-  path: '/auth/yandex/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthVkStartRoute = AuthVkStartRouteImport.update({
-  id: '/auth/vk/start',
-  path: '/auth/vk/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthVkCallbackRoute = AuthVkCallbackRouteImport.update({
-  id: '/auth/vk/callback',
-  path: '/auth/vk/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthGoogleStartRoute = AuthGoogleStartRouteImport.update({
-  id: '/auth/google/start',
-  path: '/auth/google/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
-  id: '/auth/google/callback',
-  path: '/auth/google/callback',
+const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
+  id: '/auth/github/callback',
+  path: '/auth/github/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthGithubStartRoute = AuthGithubStartRouteImport.update({
@@ -82,9 +57,34 @@ const AuthGithubStartRoute = AuthGithubStartRouteImport.update({
   path: '/auth/github/start',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
-  id: '/auth/github/callback',
-  path: '/auth/github/callback',
+const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
+  id: '/auth/google/callback',
+  path: '/auth/google/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthGoogleStartRoute = AuthGoogleStartRouteImport.update({
+  id: '/auth/google/start',
+  path: '/auth/google/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVkCallbackRoute = AuthVkCallbackRouteImport.update({
+  id: '/auth/vk/callback',
+  path: '/auth/vk/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVkStartRoute = AuthVkStartRouteImport.update({
+  id: '/auth/vk/start',
+  path: '/auth/vk/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthYandexCallbackRoute = AuthYandexCallbackRouteImport.update({
+  id: '/auth/yandex/callback',
+  path: '/auth/yandex/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthYandexStartRoute = AuthYandexStartRouteImport.update({
+  id: '/auth/yandex/start',
+  path: '/auth/yandex/start',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -195,18 +195,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sign-in': {
-      id: '/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -216,11 +209,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -230,46 +230,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/auth/yandex/start': {
-      id: '/auth/yandex/start'
-      path: '/auth/yandex/start'
-      fullPath: '/auth/yandex/start'
-      preLoaderRoute: typeof AuthYandexStartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/yandex/callback': {
-      id: '/auth/yandex/callback'
-      path: '/auth/yandex/callback'
-      fullPath: '/auth/yandex/callback'
-      preLoaderRoute: typeof AuthYandexCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/vk/start': {
-      id: '/auth/vk/start'
-      path: '/auth/vk/start'
-      fullPath: '/auth/vk/start'
-      preLoaderRoute: typeof AuthVkStartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/vk/callback': {
-      id: '/auth/vk/callback'
-      path: '/auth/vk/callback'
-      fullPath: '/auth/vk/callback'
-      preLoaderRoute: typeof AuthVkCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/google/start': {
-      id: '/auth/google/start'
-      path: '/auth/google/start'
-      fullPath: '/auth/google/start'
-      preLoaderRoute: typeof AuthGoogleStartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/google/callback': {
-      id: '/auth/google/callback'
-      path: '/auth/google/callback'
-      fullPath: '/auth/google/callback'
-      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+    '/auth/github/callback': {
+      id: '/auth/github/callback'
+      path: '/auth/github/callback'
+      fullPath: '/auth/github/callback'
+      preLoaderRoute: typeof AuthGithubCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/github/start': {
@@ -279,11 +244,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGithubStartRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/github/callback': {
-      id: '/auth/github/callback'
-      path: '/auth/github/callback'
-      fullPath: '/auth/github/callback'
-      preLoaderRoute: typeof AuthGithubCallbackRouteImport
+    '/auth/google/callback': {
+      id: '/auth/google/callback'
+      path: '/auth/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/google/start': {
+      id: '/auth/google/start'
+      path: '/auth/google/start'
+      fullPath: '/auth/google/start'
+      preLoaderRoute: typeof AuthGoogleStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/vk/callback': {
+      id: '/auth/vk/callback'
+      path: '/auth/vk/callback'
+      fullPath: '/auth/vk/callback'
+      preLoaderRoute: typeof AuthVkCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/vk/start': {
+      id: '/auth/vk/start'
+      path: '/auth/vk/start'
+      fullPath: '/auth/vk/start'
+      preLoaderRoute: typeof AuthVkStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/yandex/callback': {
+      id: '/auth/yandex/callback'
+      path: '/auth/yandex/callback'
+      fullPath: '/auth/yandex/callback'
+      preLoaderRoute: typeof AuthYandexCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/yandex/start': {
+      id: '/auth/yandex/start'
+      path: '/auth/yandex/start'
+      fullPath: '/auth/yandex/start'
+      preLoaderRoute: typeof AuthYandexStartRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

@@ -31,12 +31,12 @@ The app was created from the Blank template in `my-tanstack-app`, then moved int
 - TanStack Form through `@tanstack/react-form`.
 - Typed environment validation through `@t3-oss/env-core`, `@t3-oss/env-nextjs`, and Zod in `src/env`.
 - Reusable UI components through `@base-ui/react`, `class-variance-authority`, `tailwind-merge`, and `lucide-react`.
-- OpenAPI linting, bundling, and code generation through Redocly and `@hey-api/openapi-ts`.
+- OpenAPI linting and bundling through Redocly, with Kubb 5 generating TypeScript types, Fetch clients, Zod schemas, and TanStack Query helpers in `src/api/kubb.config.ts`.
 - Storybook 10 through `@storybook/tanstack-react`.
-- Vitest unit tests in Node and component tests in Vitest Browser Mode through `@vitest/browser-playwright` and `vitest-browser-react`.
+- Vitest 5 unit tests in Node and component tests in Vitest Browser Mode through `@vitest/browser-playwright` and `vitest-browser-react`.
 - Oxlint and Oxfmt for linting and formatting.
 - Lefthook for Git hooks.
-- Nitro with the Bun preset for server output.
+- Nitro for server output, run with Bun.
 - Bun is the package manager and runtime. Use `bun install`, `bun run dev`, `bun run build`, and `bun run start`; do not switch scripts or lockfiles to npm, pnpm, or yarn.
 
 ## Environment Variables
@@ -82,7 +82,7 @@ Local env values belong in `.env.local`, which is intentionally ignored by git. 
 - Linting: `bun run lint`; autofix with `bun run lint:fix`.
 - Formatting: `bun run fmt:check`; write formatting with `bun run fmt`.
 - Tests: `bun run test`, `bun run test:unit`, or `bun run test:browser`.
-- OpenAPI: `bun run api:lint`, `bun run api:bundle`, `bun run api:generate`, or `bun run api:watch`.
+- OpenAPI: `bun run api:lint`, `bun run api:bundle`, `bun run api:generate`, `bun run api:check`, or `bun run api:watch`. Generation validates and bundles both contracts first; `api:check` detects changes after regeneration.
 - Storybook: `bun run storybook` or `bun run build-storybook`.
 
 ## Deployment Notes
@@ -92,7 +92,7 @@ Local env values belong in `.env.local`, which is intentionally ignored by git. 
 - Pre-commit quality gate: `bunx lefthook run pre-commit`.
 - Container build: `docker build -t my-tanstack-app .`.
 - Container run: `docker run --rm -p 3000:3000 --env-file .env.local my-tanstack-app`.
-- The Dockerfile uses `oven/bun:1.3.6`, installs with `bun.lock`, builds with Nitro, and runs `.output/server/index.mjs` with Bun.
+- The Dockerfile pins Bun to the same version as `packageManager` in `package.json`, installs with `bun.lock`, builds with Nitro, and runs `.output/server/index.mjs` with Bun.
 
 ## Known Gotchas
 

@@ -27,7 +27,7 @@ const checklist = [
     },
     {
         label: 'Bun containers',
-        detail: 'Nitro targets the Bun preset and the Dockerfile runs with Bun.',
+        detail: 'Nitro builds the server output and the Dockerfile runs it with Bun.',
     },
 ] as const
 
@@ -65,7 +65,7 @@ export function normalizeProjectNote(data: unknown): ProjectNoteInput {
 }
 
 export const submitProjectNote = createServerFn({ method: 'POST' })
-    .inputValidator(normalizeProjectNote)
+    .validator(normalizeProjectNote)
     .handler(async ({ data }): Promise<ProjectNoteResult> => {
         return {
             ...data,
